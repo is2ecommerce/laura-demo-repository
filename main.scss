@@ -1,48 +1,5 @@
-/* Estilos principales del carrito de compras */
+/* Estilos principales del carrito de compras usando solo variables del submodule */
 @import 'src/styles/variables';
-
-/* Variables básicas usando las fuentes del submodule */
-:root {
-  --color-primary: #1565c0;
-  --color-secondary: #f06292;
-  --color-success: #43a047;
-  --color-error: #e53935;
-  --color-warning: #ffa000;
-  --color-background: #f4f6fa;
-  --color-gray-light: #e0e0e0;
-  --color-dark: #333333;
-  
-  --text-color-primary: #333333;
-  --text-color-secondary: #666666;
-  --border-color: #e0e0e0;
-  
-  --font-family-main: #{$font-main};
-  --font-family-secondary: #{$font-secondary};
-  --font-size-base: 14px;
-  --font-size-small: 12px;
-  --font-size-large: 16px;
-  --font-size-h1: 32px;
-  --font-size-h2: 24px;
-  --font-size-h3: 20px;
-  --font-size-h4: 18px;
-  
-  --font-weight-normal: 400;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
-  
-  --border-radius-base: 8px;
-  --border-radius-small: 4px;
-  --border-radius-pill: 50px;
-  
-  --shadow-small: 0 2px 4px rgba(0,0,0,0.1);
-  --shadow-medium: 0 4px 8px rgba(0,0,0,0.15);
-  --shadow-large: 0 8px 16px rgba(0,0,0,0.2);
-  
-  --transition-base: all 0.3s ease;
-  
-  --breakpoint-mobile: 768px;
-  --breakpoint-tablet: 1024px;
-}
 
 /* Aplicar fuentes del submodule globalmente */
 body {
