@@ -1,0 +1,3 @@
+[submodule "src/styles"]
+	path = src/styles
+	url = https://github.com/LauraCD2/styles.git
