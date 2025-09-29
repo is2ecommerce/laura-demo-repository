@@ -1,0 +1,169 @@
+<div class="shopping-cart">
+  <div class="cart-header">
+    <h2 class="cart-title">Carrito de Compras</h2>
+    <div class="cart-count" *ngIf="cartSummary.itemCount > 0">
+      {{ cartSummary.itemCount }} {{ cartSummary.itemCount === 1 ? 'producto' : 'productos' }}
+    </div>
+  </div>
+
+  <!-- Carrito vacío -->
+  <div class="empty-cart" *ngIf="cartSummary.items.length === 0">
+    <div class="empty-cart-icon">
+      <svg width="80" height="80" viewBox="0 0 24 24" fill="none">
+        <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V16.5M9 19.5C9.8 19.5 10.5 20.2 10.5 21S9.8 22.5 9 22.5 7.5 21.8 7.5 21 8.2 19.5 9 19.5ZM20 19.5C20.8 19.5 21.5 20.2 21.5 21S20.8 22.5 20 22.5 18.5 21.8 18.5 21 19.2 19.5 20 19.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h3>Tu carrito está vacío</h3>
+    <p>¡Descubre nuestros productos y comienza a comprar!</p>
+    <button class="btn btn-primary" (click)="goToCatalog()">
+      Ver Catálogo
+    </button>
+  </div>
+
+  <!-- Carrito con productos -->
+  <div class="cart-content" *ngIf="cartSummary.items.length > 0">
+    
+    <!-- Lista de productos -->
+    <div class="cart-items">
+      <div class="cart-item" *ngFor="let item of cartSummary.items; trackBy: trackByProductId">
+        
+        <!-- Imagen del producto -->
+        <div class="item-image">
+          <img [src]="item.product.image" [alt]="item.product.name" loading="lazy">
+        </div>
+
+        <!-- Información del producto -->
+        <div class="item-info">
+          <h4 class="item-name">{{ item.product.name }}</h4>
+          <p class="item-description" *ngIf="item.product.description">{{ item.product.description }}</p>
+          
+          <!-- Precio con descuento -->
+          <div class="item-price">
+            <span class="current-price">{{ formatPrice(item.product.price) }}</span>
+            <span class="original-price" *ngIf="hasDiscount(item)">
+              {{ formatPrice(item.product.originalPrice!) }}
+            </span>
+            <span class="discount-badge" *ngIf="hasDiscount(item)">
+              -{{ getDiscountPercentage(item) }}%
+            </span>
+          </div>
+        </div>
+
+        <!-- Controles de cantidad -->
+        <div class="item-quantity">
+          <label class="quantity-label">Cantidad:</label>
+          <div class="quantity-controls">
+            <button 
+              class="btn-quantity btn-decrease" 
+              (click)="decreaseQuantity(item.product.id)"
+              [disabled]="item.quantity <= 1">
+              <svg width="16" height="16" viewBox="0 0 24 24">
+                <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <span class="quantity-value">{{ item.quantity }}</span>
+            <button 
+              class="btn-quantity btn-increase" 
+              (click)="increaseQuantity(item.product.id)">
+              <svg width="16" height="16" viewBox="0 0 24 24">
+                <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Subtotal -->
+        <div class="item-subtotal">
+          <label class="subtotal-label">Subtotal:</label>
+          <span class="subtotal-value">{{ formatPrice(item.subtotal) }}</span>
+        </div>
+
+        <!-- Botón eliminar -->
+        <div class="item-actions">
+          <button 
+            class="btn-remove" 
+            (click)="removeItem(item.product.id)"
+            title="Eliminar producto">
+            <svg width="20" height="20" viewBox="0 0 24 24">
+              <path d="M3 6H5H21M8 6V4C8 3.4 8.4 3 9 3H15C15.6 3 16 3.4 16 4V6M19 6V20C19 20.6 18.6 21 18 21H6C5.4 21 5 20.6 5 20V6H19ZM10 11V17M14 11V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resumen del carrito -->
+    <div class="cart-summary">
+      
+      <!-- Código promocional -->
+      <div class="promo-section">
+        <h4>¿Tienes un código promocional?</h4>
+        
+        <div class="promo-input-container" *ngIf="!appliedPromoCode">
+          <div class="promo-input-group">
+            <input 
+              type="text" 
+              class="promo-input"
+              [(ngModel)]="promoCodeInput"
+              placeholder="Ingresa tu código"
+              (keyup.enter)="applyPromoCode()">
+            <button 
+              class="btn btn-secondary" 
+              (click)="applyPromoCode()"
+              [disabled]="!promoCodeInput.trim()">
+              Aplicar
+            </button>
+          </div>
+          <div class="promo-message" *ngIf="promoMessage" [class]="'promo-' + promoMessageType">
+            {{ promoMessage }}
+          </div>
+        </div>
+
+        <div class="applied-promo" *ngIf="appliedPromoCode">
+          <div class="promo-info">
+            <span class="promo-code">{{ appliedPromoCode.code }}</span>
+            <span class="promo-discount">-{{ appliedPromoCode.discount }}%</span>
+          </div>
+          <button class="btn-remove-promo" (click)="removePromoCode()">
+            <svg width="16" height="16" viewBox="0 0 24 24">
+              <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Totales -->
+      <div class="totals-section">
+        <div class="total-line">
+          <span class="total-label">Subtotal:</span>
+          <span class="total-value">{{ formatPrice(cartSummary.subtotal) }}</span>
+        </div>
+        
+        <div class="total-line discount-line" *ngIf="cartSummary.discount > 0">
+          <span class="total-label">Descuento en productos:</span>
+          <span class="total-value discount-value">-{{ formatPrice(cartSummary.discount) }}</span>
+        </div>
+        
+        <div class="total-line promo-line" *ngIf="cartSummary.promoDiscount > 0">
+          <span class="total-label">Descuento promocional:</span>
+          <span class="total-value discount-value">-{{ formatPrice(cartSummary.promoDiscount) }}</span>
+        </div>
+        
+        <div class="total-line final-total">
+          <span class="total-label">Total:</span>
+          <span class="total-value">{{ formatPrice(cartSummary.total) }}</span>
+        </div>
+      </div>
+
+      <!-- Botón de pago -->
+      <div class="checkout-section">
+        <button 
+          class="btn btn-primary btn-checkout" 
+          (click)="proceedToCheckout()"
+          [disabled]="cartSummary.items.length === 0">
+          Continuar con el Pago
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

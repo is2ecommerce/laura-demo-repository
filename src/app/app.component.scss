@@ -1,0 +1,127 @@
+@import '../styles/variables';
+@import '../styles/components';
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: $color-background;
+
+  .app-header {
+    background: white;
+    box-shadow: $shadow-sm;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    h1 {
+      color: $color-primary;
+      font-size: $font-size-subtitle;
+      margin: 0;
+      font-weight: bold;
+    }
+
+    .app-nav {
+      display: flex;
+      gap: 12px;
+
+      .btn {
+        padding: 8px 16px;
+        font-size: var(--font-size-small);
+        
+        &.active {
+          background: var(--color-primary);
+          color: white;
+        }
+      }
+    }
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 16px;
+      text-align: center;
+
+      h1 {
+        font-size: var(--font-size-h3);
+      }
+    }
+  }
+
+  .app-main {
+    flex: 1;
+    padding: 20px 0;
+  }
+
+  .app-footer {
+    background: var(--color-dark);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: auto;
+
+    p {
+      margin: 0;
+      font-size: var(--font-size-small);
+    }
+  }
+}
+
+// Reset básico
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family-base);
+  line-height: 1.6;
+  color: var(--text-color-primary);
+}
+
+// Botones globales
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--border-radius-base);
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: var(--transition-base);
+
+  &.btn-primary {
+    background: var(--color-primary);
+    color: white;
+
+    &:hover:not(:disabled) {
+      background: #0d47a1;
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-medium);
+    }
+  }
+
+  &.btn-secondary {
+    background: var(--color-secondary);
+    color: white;
+
+    &:hover:not(:disabled) {
+      background: #e91e63;
+    }
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}
