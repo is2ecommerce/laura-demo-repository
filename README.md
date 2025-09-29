@@ -76,7 +76,7 @@ Los estilos están organizados usando un submódulo de Git que contiene:
 
 1. **Clonar el repositorio con submódulos**:
    ```bash
-   git clone --recursive https://github.com/tu-usuario/demo-repository.git
+   git clone --recursive https://github.com/tu-usuario/laura-demo-repository.git
    ```
 
 2. **Instalar dependencias**:
