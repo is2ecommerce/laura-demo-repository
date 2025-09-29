@@ -78,9 +78,9 @@
 }
 
 body {
-  font-family: var(--font-family-base);
+  font-family: $font-main;
   line-height: 1.6;
-  color: var(--text-color-primary);
+  color: $color-text;
 }
 
 // Botones globales
